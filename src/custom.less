@@ -1,0 +1,52 @@
+@import "./css/fonts/inter.css";
+
+html, body {
+    position: relative;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    font-family: "Inter", "Roboto", -apple-system, BlinkMacSystemFont, 'Helvetica Neue', "微软雅黑", "Microsoft YaHei UI", sans-serif
+}
+
+*::selection {
+    background-color: rgba(33, 150, 243, .4) !important;
+    color: inherit;
+}
+
+#app {
+    display: block;
+    margin: auto;
+}
+
+.md-helper-text, .md-error {
+    margin-left: 36px !important;
+}
+
+.information {
+    max-width: 80%;
+    display: flex;
+
+    .information-stepper {
+      max-width: 1024px;
+      position: relative;
+      height: 480px;
+
+      .md-stepper {
+          height: 100%;
+      }
+    }
+
+    .md-field.select {
+        @media screen and (min-width: 1024px) {
+            max-width: 320px;
+        }
+    }
+}
+
+textarea {
+    resize: none;
+}
