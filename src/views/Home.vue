@@ -126,10 +126,10 @@
           <p>若只有 Minecraft，则可以填写喜欢 Minecraft 的理由。</p>
           <md-field>
             <label>答案</label>
-            <md-textarea required v-model="prefered_games" maxlength="1000"></md-textarea>
+            <md-textarea required v-model="preferred_games" maxlength="1000"></md-textarea>
           </md-field>
           <md-button
-            :disabled="prefered_games.length <= 20"
+            :disabled="preferred_games.length <= 20"
             @click="next()"
             class="md-primary md-raised"
           >下一步 &raquo;</md-button>
@@ -212,7 +212,7 @@ export default {
       focusing: "",
       introduction: "",
       want_to_do: "",
-      prefered_games: "",
+      preferred_games: "",
       links: "",
       // controller
       active: "register",
@@ -253,7 +253,7 @@ export default {
         focusing: this.focusing,
         introduction: this.introduction,
         want_to_do: this.want_to_do,
-        prefered_games: this.prefered_games,
+        preferred_games: this.preferred_games,
         links: this.links
       }
 
