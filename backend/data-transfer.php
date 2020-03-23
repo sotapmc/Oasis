@@ -1,7 +1,7 @@
 <?php
 
-require "functions/database.php";
-require "functions/verification.php";
+require_once "functions/database.php";
+require_once "functions/verification.php";
 
 $data = $_POST;
 

@@ -1,6 +1,6 @@
 <?php
 
-$cfg = require dirname(dirname(__FILE__)) . "/config.php";
+$cfg = require_once dirname(dirname(__FILE__)) . "/config.php";
 
 class Verification {
     protected $data;

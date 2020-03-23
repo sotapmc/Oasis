@@ -8,7 +8,7 @@
  * 重要：在使用时请将文件名更改为 config.php 即去掉 -example
  */
 
-require "functions/config.php";
+require_once "functions/config.php";
 
 return new Config([
     // 数据库相关设置

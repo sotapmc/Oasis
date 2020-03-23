@@ -1,6 +1,6 @@
 <?php
 
-require "functions/database.php";
+require_once "functions/database.php";
 
 $conn = new DBController();
 
