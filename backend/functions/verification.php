@@ -41,12 +41,6 @@ class Verification {
         //return !in_array(false, $verify);
     }
 
-    public function isBlacklisted(): bool {
-        $username = $this->data["username"];
-        $r = $this->conn->query("SELECT * FROM applications WHERE username='$username' AND status='blacklisted'");
-        return $r->num_rows > 0;
-    }
-
     public function isCommitable(): bool {
         $username = $this->data["username"];
         // 判断是否为未审核状态，如果是则不允许重复申请
@@ -59,6 +53,12 @@ class Verification {
         $r2 = $this->conn->query("SELECT * FROM applications WHERE username='$username'");
         if ($r2->num_rows > 3) {
             $this->reason = "too_much";
+            return false;
+        }
+        // 判断是否为黑名单
+        $r3 = $this->conn->query("SELECT * FROM applications WHERE username='$username' AND status='blacklisted'");
+        if ($r3->num_rows > 0) {
+            $this->reason = "blacklisted";
             return false;
         }
         return true;

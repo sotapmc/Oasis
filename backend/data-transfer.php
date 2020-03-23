@@ -8,10 +8,7 @@ $data = $_POST;
 function submit(array $data) {
     $conn = new DBController("oasis");
     $ver = new Verification($data, $conn->getInstance());
-    
-    if ($ver->isBlacklisted()) {
-        return 'blacklisted';
-    } else if ($ver->isCommitable()) {
+    if ($ver->isCommitable()) {
         if ($ver->verify()) {
             extract($data);
             $conn->query("INSERT INTO applications (username, age, gender, email, come_from, lgbt, focusing, introduction, want_to_do, preferred_games, links)
