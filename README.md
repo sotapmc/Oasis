@@ -53,7 +53,7 @@ $ npm i
 php -S 127.0.0.1:2333
 ```
 
-⚠⚠⚠ 请勿使用 `localhost:2333` 的写法，否则可能导致 Vue 的 devserver 无法 proxy 到后端的正确目录。Vue 的 proxy 设置位于 `/vue.config.js`。
+> ❌ 请勿使用 `localhost:2333` 的写法，否则可能导致 Vue 的 devserver 无法 proxy 到后端的正确目录。Vue 的 proxy 设置位于 `/vue.config.js`。
 
 ## 协议
 
