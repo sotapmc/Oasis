@@ -47,7 +47,7 @@ class Verification {
         return $r->num_rows > 0;
     }
 
-    public function isCommitable(): string {
+    public function isCommitable(): bool {
         $username = $this->data["username"];
         // 判断是否为未审核状态，如果是则不允许重复申请
         $r1 = $this->conn->query("SELECT * FROM applications WHERE username='$username' AND status='pending' AND removed='no'");
