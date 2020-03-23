@@ -8,7 +8,7 @@
  * 重要：在使用时请将文件名更改为 config.php 即去掉 -example
  */
 
-require_once "functions/config.php";
+require_once "functions/config-controller.php";
 
 return new Config([
     // 数据库相关设置
@@ -17,4 +17,7 @@ return new Config([
         "username" => "root", // 用户名
         "password" => "" // 密码
     ],
+    "oasis" => [
+        "max-app-per-player" => 3 //允许同一用户名玩家最大的申请次数
+    ]
 ]);
