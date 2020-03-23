@@ -305,6 +305,10 @@ export default {
               this.info = "您的所有申请已被标记为黑名单";
               break;
 
+            case "too_short":
+              this.info_title = "内容缺失";
+              this.info = "您填写的内容因过短而无效";
+
             default:
               this.info_title = "失败";
               this.info = "您填写的数据无效";

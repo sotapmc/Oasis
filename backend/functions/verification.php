@@ -65,10 +65,13 @@ class Verification {
     }
 
     public function required(...$args): bool {
-        $a = null;
+        $a = true;
         foreach ($args as $value) {
-            $a = mb_strlen($value) >= 20 ? true : false;
+            if (mb_strlen($value) < 20) {
+                $this->reason = "too_short";
+                return false;
+            }
         }
-        return $a === true;
+        return true;
     }
 }
