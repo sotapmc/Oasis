@@ -152,9 +152,7 @@
         </md-step>
       </md-steppers>
       <md-dialog :md-active.sync="submit_dialog">
-        <md-dialog-title>
-          提交申请
-        </md-dialog-title>
+        <md-dialog-title>提交申请</md-dialog-title>
         <md-empty-state>
           <md-icon class="md-empty-state-icon mdi mdi-send" />
           <span class="md-empty-state-label">您的申请即将提交</span>
@@ -163,6 +161,19 @@
         <md-dialog-actions>
           <md-button class="md-primary" @click="submit_dialog = false">取消</md-button>
           <md-button class="md-primary md-raised" @click="submit()">提交</md-button>
+        </md-dialog-actions>
+      </md-dialog>
+      <md-dialog :md-active.sync="info_dialog">
+        <md-dialog-title>提交结果</md-dialog-title>
+        <md-progress-spinner class="loading" v-if="submitting" md-mode="indeterminate"></md-progress-spinner>
+        <md-empty-state v-if="!submitting">
+          <md-icon class="md-empty-state-icon mdi mdi-check" v-if="info_ok" />
+          <md-icon class="md-empty-state-icon mdi mdi-close" v-if="info_error" />
+          <span class="md-empty-state-label">{{ info_title }}</span>
+          <span class="md-empty-state-description">{{ info }}</span>
+        </md-empty-state>
+        <md-dialog-actions>
+          <md-button class="md-primary md-raised" @click="info_dialog = false">好</md-button>
         </md-dialog-actions>
       </md-dialog>
     </div>
@@ -182,6 +193,7 @@ import MdSteppers from "vue-material/dist/components/MdSteppers";
 import { isPC, getLinks } from "../functions";
 import MdDialog from "vue-material/dist/components/MdDialog";
 import MdEmptyState from "vue-material/dist/components/MdEmptyState";
+import MdProgress from "vue-material/dist/components/MdProgress";
 
 Vue.use(MdIcon)
   .use(MdField)
@@ -191,7 +203,8 @@ Vue.use(MdIcon)
   .use(MdCheckbox)
   .use(MdSteppers)
   .use(MdDialog)
-  .use(MdEmptyState);
+  .use(MdEmptyState)
+  .use(MdProgress);
 
 export default {
   data() {
@@ -217,7 +230,13 @@ export default {
       // controller
       active: "register",
       i: 0,
-      submit_dialog: false
+      submit_dialog: false,
+      info_dialog: false,
+      submitting: false,
+      info_ok: true,
+      info_error: false,
+      info_title: "",
+      info: ""
     };
   },
   methods: {
@@ -242,6 +261,9 @@ export default {
       this.active = "information";
     },
     submit() {
+      this.submit_dialog = false;
+      this.info_dialog = true;
+      this.submitting = true;
       let data = {
         username: this.username,
         age: this.age,
@@ -255,10 +277,40 @@ export default {
         want_to_do: this.want_to_do,
         preferred_games: this.preferred_games,
         links: this.links
-      }
+      };
 
       this.$server.post(data, r => {
-        console.log(r);
+        this.submitting = false;
+        let data = r.data;
+        if (data === "ok") {
+          this.info_ok = true;
+          this.info_title = "成功";
+          this.info = "您的申请已提交，将在 24 小时内得到回复";
+        } else {
+          this.info_ok = false;
+          this.info_error = true;
+          switch (data) {
+            case "pending":
+              this.info_title = "正在审核中";
+              this.info = "您的申请正在审核中，请耐心等待";
+              break;
+
+            case "too_much":
+              this.info_title = "申请过多";
+              this.info = "您提交的申请数量超出了我们的限额";
+              break;
+
+            case "blacklisted":
+              this.info_title = "黑名单";
+              this.info = "您的所有申请已被标记为黑名单";
+              break;
+
+            default:
+              this.info_title = "失败";
+              this.info = "您填写的数据无效";
+          }
+        }
+        this.info_dialog = true;
       });
     }
   },
@@ -339,5 +391,12 @@ export default {
   padding-right: 64px;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+</style>
+
+<style lang="less">
+.loading {
+  display: block;
+  margin: auto;
 }
 </style>
