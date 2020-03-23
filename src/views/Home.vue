@@ -44,7 +44,7 @@
       >继续 &raquo;</md-button>
     </div>
     <div class="information" v-if="active === 'information'">
-      <md-steppers class="information-stepper" :md-active-step.sync="step" md-linear>
+      <md-steppers class="information-stepper" :md-active-step.sync="step" :md-linear="isPC()" :md-vertical="!isPC()">
         <md-step id="1" md-label="问题一">
           <h1>您从何处得知 SoTap？</h1>
           <md-field class="select">
@@ -389,12 +389,20 @@ export default {
 }
 
 .register {
-  background-color: white;
   padding: 32px;
-  padding-left: 64px;
-  padding-right: 64px;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  @media screen and (min-width: 1024px) {
+    padding-left: 64px;
+    padding-right: 64px;
+    background-color: white;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  }
+}
+
+h1 {
+  @media screen and (max-width: 1024px) {
+    line-height: 1.2;
+  }
 }
 </style>
 
