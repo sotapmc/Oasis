@@ -1,10 +1,8 @@
 <?php
-
-$cfg = require_once dirname(dirname(__FILE__)) . "/config.php";
-
 class Verification {
     protected $data;
     protected $conn;
+    protected $cfg;
     public $error;
     public $reason;
 
@@ -12,6 +10,7 @@ class Verification {
         $this->data = $data;
         $this->error = [];
         $this->conn = $connect;
+        $this->cfg = require_once dirname(dirname(__FILE__)) . "/config.php";
     }
 
     public function verify() {
@@ -51,7 +50,7 @@ class Verification {
         }
         // 判断是否申请超过3次，如果是则不允许申请
         $r2 = $this->conn->query("SELECT * FROM applications WHERE username='$username'");
-        if ($r2->num_rows > 3) {
+        if ($r2->num_rows > $this->cfg->get("oasis.max-app-per-player")) {
             $this->reason = "too_much";
             return false;
         }

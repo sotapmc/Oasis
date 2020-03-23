@@ -1,18 +1,15 @@
 <?php
 
-$cfg = require_once dirname(dirname(__FILE__)) . "/config.php";
-
 class DBController {
     public $conn;
     public function __construct(string $db = null)
     {
-        global $cfg;
+        $cfg = require_once dirname(dirname(__FILE__)) . "/config.php";
         $this->conn = $this->connect([
             "host" => $cfg->get("mysql.host"),
             "username" => $cfg->get("mysql.username"),
             "password" => $cfg->get("mysql.password")
         ], $db);
-        $this->conn->query("SET NAMES utf8");
     }
 
     public function connect(array $info, string $database = null) {
