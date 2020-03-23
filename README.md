@@ -19,6 +19,42 @@ Oasis 由表单和管理后台组成，表单可通过*某些方法*进行定制
 
 虽然 Oasis 是开源自由软件，但目前它的逻辑代码设计均倾向于 SoTap 定制，因此如果您想要将 Oasis 应用到自己的业务场景内，则可能需要等待一段时间。公众化重写将会在不远的未来开始执行，届时 Oasis 可应用于所有场景。
 
+## 贡献
+
+Oasis 目前在如下环境测试成功：
+
+|软体名称|版本|注释|
+|:-:|:-:|:-:|
+|Windows 10|1903 `18362.720`|-|
+|Google Chrome|`80.0.3987.149`|-|
+|PHP|7.4|`mbstring` and `mysqli` extension required|
+|Apache|2.4.41|`mod_rewrite` enabled with php support|
+|MySQL|10.4.11-MariaDB|please use MariaDB instead of Oracle MySQL|
+|Vue.js|2.6|-|
+|Nodejs|12.14.1|-|
+
+在贡献之前，先 Fork 本项目后 `clone`。
+
+```bash
+$ git clone git@github.com:YourName/Oasis
+```
+
+安装依赖
+
+```bash
+$ npm i
+```
+
+安装以后，您需要手动运行 `/backend/setup.php` 进行数据库部署。部署后，则可以开始更改代码以后提交。如果一切就绪，则可以向本项目提交 Pull Request。
+
+如果没有什么太大的需求（例如地址重写），则可以选择使用 php 的内置服务器。
+
+```bash
+php -S 127.0.0.1:2333
+```
+
+⚠⚠⚠ 请勿使用 `localhost:2333` 的写法，否则可能导致 Vue 的 devserver 无法 proxy 到后端的正确目录。Vue 的 proxy 设置位于 `/vue.config.js`。
+
 ## 协议
 
 Apache-2.0
