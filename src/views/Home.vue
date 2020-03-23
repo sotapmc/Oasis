@@ -308,6 +308,12 @@ export default {
             case "too_short":
               this.info_title = "内容缺失";
               this.info = "您填写的内容因过短而无效";
+              break;
+              
+            case "bad_agreement":
+              this.info_title = "协议失效"
+              this.info = "您必须同意我们的协议才可提交申请";
+              break;
 
             default:
               this.info_title = "失败";
