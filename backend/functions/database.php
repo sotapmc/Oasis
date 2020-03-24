@@ -2,13 +2,15 @@
 
 class DBController {
     public $conn;
-    public function __construct(string $db = null)
+    protected $cfg;
+
+    public function __construct(Config $config, string $db = null)
     {
-        $cfg = require_once dirname(dirname(__FILE__)) . "/config.php";
+        $this->cfg = $config;
         $this->conn = $this->connect([
-            "host" => $cfg->get("mysql.host"),
-            "username" => $cfg->get("mysql.username"),
-            "password" => $cfg->get("mysql.password")
+            "host" => $this->cfg->get("mysql.host"),
+            "username" => $this->cfg->get("mysql.username"),
+            "password" => $this->cfg->get("mysql.password")
         ], $db);
     }
 
@@ -25,7 +27,7 @@ class DBController {
     }
 
     public function isOK(): bool {
-        return $this->conn->errno !== 0 && empty($this->conn->error);
+        return $this->conn->errno !== false;
     }
 
     public function getError(): string {
