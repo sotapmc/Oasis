@@ -33,18 +33,23 @@
         </md-select>
         <span class="md-helper-text">您的性别</span>
       </md-field>
-      <md-checkbox v-model="agreement">
+      <md-checkbox v-if="agreement_enabled" v-model="agreement">
         我已阅读并同意
-        <router-link to="/agreement">《SoTap 居民申请协议》</router-link>
+        <router-link to="/agreement">{{ agreement_name }}</router-link>
       </md-checkbox>
       <md-button
-        @click="_continue()"
+        @click="active = 'information'"
         :disabled="checkInvalid()"
         class="btn md-primary md-raised"
       >继续 &raquo;</md-button>
     </div>
     <div class="information" v-if="active === 'information'">
-      <md-steppers class="information-stepper" :md-active-step.sync="step" :md-linear="isPC()" :md-vertical="!isPC()">
+      <md-steppers
+        class="information-stepper"
+        :md-active-step.sync="step"
+        :md-linear="isPC()"
+        :md-vertical="!isPC()"
+      >
         <md-step id="1" md-label="问题一">
           <h1>您从何处得知 SoTap？</h1>
           <md-field class="select">
@@ -165,9 +170,8 @@
       </md-dialog>
       <md-dialog :md-active.sync="info_dialog">
         <md-dialog-title>提交结果</md-dialog-title>
-        <md-progress-spinner class="loading" v-if="submitting" md-mode="indeterminate"></md-progress-spinner>
-        <md-empty-state v-if="!submitting">
-          <md-icon class="md-empty-state-icon mdi mdi-check" v-if="info_ok" />
+        <md-empty-state class="info-container" v-if="!submitting">
+          <md-icon style="color: #2196f3" class="md-empty-state-icon mdi mdi-check" v-if="info_ok" />
           <md-icon class="md-empty-state-icon mdi mdi-close" v-if="info_error" />
           <span class="md-empty-state-label">{{ info_title }}</span>
           <span class="md-empty-state-description">{{ info }}</span>
@@ -175,6 +179,10 @@
         <md-dialog-actions>
           <md-button class="md-primary md-raised" @click="info_dialog = false">好</md-button>
         </md-dialog-actions>
+      </md-dialog>
+      <md-dialog :md-active.sync="submitting">
+        <md-dialog-title>请稍等...</md-dialog-title>
+        <md-progress-spinner class="loading" md-mode="indeterminate"></md-progress-spinner>
       </md-dialog>
     </div>
   </div>
@@ -236,7 +244,10 @@ export default {
       info_ok: true,
       info_error: false,
       info_title: "",
-      info: ""
+      info: "",
+      //agreement
+      agreement_name: "",
+      agreement_enabled: false
     };
   },
   methods: {
@@ -254,15 +265,11 @@ export default {
         this.username_invalid === "md-invalid" ||
         this.age_invalid === "md-invalid" ||
         this.email_invalid === "md-invalid" ||
-        this.agreement !== true
+        (this.agreement !== true && this.agreement !== "not_enabled")
       );
-    },
-    _continue() {
-      this.active = "information";
     },
     submit() {
       this.submit_dialog = false;
-      this.info_dialog = true;
       this.submitting = true;
       let data = {
         username: this.username,
@@ -279,7 +286,8 @@ export default {
         links: this.links
       };
 
-      this.$server.post(data, r => {
+      this.$server.post("submit", data, r => {
+        console.log(r);
         this.submitting = false;
         let data = r.data;
         if (data === "ok") {
@@ -309,9 +317,9 @@ export default {
               this.info_title = "内容缺失";
               this.info = "您填写的内容因过短而无效";
               break;
-              
+
             case "bad_agreement":
-              this.info_title = "协议失效"
+              this.info_title = "协议失效";
               this.info = "您必须同意我们的协议才可提交申请";
               break;
 
@@ -360,6 +368,16 @@ export default {
   },
   components: {
     Logo
+  },
+  mounted() {
+    this.$server.getcfg(
+      ["oasis.agreement-enabled", "oasis.agreement-name"],
+      r => {
+        this.agreement_enabled = r[0];
+        this.agreement_name = r[1];
+        this.agreement = "not_enabled";
+      }
+    );
   }
 };
 </script>
@@ -416,5 +434,6 @@ h1 {
 .loading {
   display: block;
   margin: auto;
+  padding: 128px;
 }
 </style>
