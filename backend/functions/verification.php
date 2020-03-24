@@ -5,32 +5,33 @@ class Verification {
     protected $cfg;
     public $error;
     public $reason;
+    public $data_ver;
 
-    public function __construct(array $data, mysqli $connect) {
+    public function __construct(array $data, mysqli $connect, Config $config) {
         $this->data = $data;
         $this->error = [];
         $this->conn = $connect;
-        $this->cfg = require_once dirname(dirname(__FILE__)) . "/config.php";
+        $this->cfg = $config;
     }
 
     public function verify() {
         extract($this->data);
-        if ($agreement !== true){
+        if ($this->cfg->get("oasis.agreement-enabled") === true && $agreement !== true){
             return 'bad_agreement';
         }
         $age = intval($age);
-        $verify = [
+        $this->data_ver = [
             "username" => preg_match("/^[a-zA-Z0-9_]{3,18}$/", $username),
             "age" => empty($age) ? true : $age >= 13 && $age <= 120,
             "gender" => $gender === "male" || $gender === "female" || $gender === "secret" || $gender === "others",
             "email" => preg_match("/^[A-Za-z0-9]+([_\.][A-Za-z0-9]+)*@([A-Za-z0-9\-]+\.)+[A-Za-z]{2,6}$/", $email) && mb_strlen($email) !== 0,
             "come_from" => in_array($come_from, ["mcbbs", "douban", "nga", "mcmod", "zhihu", "recommended", "other"]),
             "lgbt" => $lgbt === 'yes' || $lgbt === 'no',
-            "links" => preg_match("/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/", $links),
-            "contents" => $this->required($focusing, $introduction, $want_to_do, $preferred_games)
+            "links" => preg_match("!https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)!", $links),
+            "contents" => mb_strlen($focusing) > 2 && $this->required($introduction, $want_to_do, $preferred_games)
         ];
         $a = true;
-        foreach ($verify as $key => $value) {
+        foreach ($this->data_ver as $key => $value) {
             if ($value === false) {
                 array_push($this->error, $key);
                 $a = false;
@@ -65,7 +66,7 @@ class Verification {
 
     public function required(...$args): bool {
         $a = true;
-        foreach ($args as $value) {
+        foreach ($args as $key => $value) {
             if (mb_strlen($value) < 20) {
                 $this->reason = "too_short";
                 return false;
