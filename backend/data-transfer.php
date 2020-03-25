@@ -34,6 +34,13 @@ switch ($action) {
         }
     break;
 
+    case "get-agreement":
+        require_once "vendor/parsedown.php";
+        $parser = new Parsedown();
+        $agreement = file_get_contents("agreement.md");
+        echo $parser->text($agreement);
+    break;
+
     case "get-config":
         if (is_array($data)) {
             $result = [];
