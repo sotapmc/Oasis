@@ -28,10 +28,3 @@ export default {
   }
 };
 </script>
-
-<style lang="less" scoped>
-.agreement {
-  height: 100%;
-  position: relative;
-}
-</style>

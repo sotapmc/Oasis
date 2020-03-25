@@ -49,8 +49,14 @@ textarea {
 }
 
 .agreement {
-    padding: 64px;
-    padding-bottom: 64px;
+    @media screen and (min-width: 1024px) {
+        padding: 64px;
+    }
+    @media screen and (max-width: 1024px) {
+        padding: 32px;
+    }
+    height: 100%;
+    position: relative;
     article.content {
         line-height: 1.8;
 
