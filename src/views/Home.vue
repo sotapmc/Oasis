@@ -459,4 +459,10 @@ h1 {
     line-height: 1.2;
   }
 }
+
+.loading {
+  display: block;
+  margin: auto;
+  padding: 64px;
+}
 </style>
