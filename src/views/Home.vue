@@ -394,6 +394,11 @@ export default {
   @media screen and (min-width: 1024px) {
     min-width: 350px;
   }
+  
+  display: flex;
+  align-items: center;
+  height: 100%;
+  position: relative;
 }
 
 .logo {
@@ -421,19 +426,35 @@ export default {
     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
       0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   }
+  display: block;
+  margin: auto;
+}
+
+.information {
+    max-width: 80%;
+    display: block;
+    margin: auto;
+    
+    .information-stepper {
+      max-width: 1024px;
+      position: relative;
+      height: 480px;
+
+      .md-stepper {
+          height: 100%;
+      }
+    }
+
+    .md-field.select {
+        @media screen and (min-width: 1024px) {
+            max-width: 320px;
+        }
+    }
 }
 
 h1 {
   @media screen and (max-width: 1024px) {
     line-height: 1.2;
   }
-}
-</style>
-
-<style lang="less">
-.loading {
-  display: block;
-  margin: auto;
-  padding: 128px;
 }
 </style>

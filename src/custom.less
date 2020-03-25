@@ -2,11 +2,10 @@
 
 html, body {
     position: relative;
+    margin: 0;
 }
 
 body {
-    display: flex;
-    align-items: center;
     height: 100%;
     width: 100%;
     font-family: "Inter", "Roboto", -apple-system, BlinkMacSystemFont, 'Helvetica Neue', "微软雅黑", "Microsoft YaHei UI", sans-serif
@@ -25,27 +24,6 @@ body {
     margin-left: 36px !important;
 }
 
-.information {
-    max-width: 80%;
-    display: flex;
-
-    .information-stepper {
-      max-width: 1024px;
-      position: relative;
-      height: 480px;
-
-      .md-stepper {
-          height: 100%;
-      }
-    }
-
-    .md-field.select {
-        @media screen and (min-width: 1024px) {
-            max-width: 320px;
-        }
-    }
-}
-
 textarea {
     resize: none;
 }
@@ -54,5 +32,60 @@ textarea {
     @media screen and (max-width: 1024px) {
         height: 100%;
         overflow: hidden;
+    }
+}
+
+.loading-container {
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    
+    .loading {
+        display: block;
+        margin: auto;
+        padding: 128px;
+    }
+}
+
+.agreement {
+    padding: 64px;
+    padding-bottom: 64px;
+    article.content {
+        line-height: 1.8;
+
+        & > h1 {
+            color: var(--md-theme-default-primary);
+        }
+
+        h1 {
+            @media screen and (max-width: 1024px) {
+                font-size: 36px;
+            }
+            @media screen and (min-width: 1024px) {
+                font-size: 48px;
+            }
+            margin-top: 16px;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        code, pre {
+            font-family: "Fira Code", "Roboto Mono", Consolas, 'Courier New', Courier, monospace;
+        }
+
+        code {
+            background-color: rgba(0, 0, 0, .03);
+            border-radius: 2px;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            padding-left: 8px;
+            padding-right: 8px;
+            color: var(--md-theme-default-primary);
+            font-size: 14px;
+        }
     }
 }
