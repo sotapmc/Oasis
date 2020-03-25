@@ -50,7 +50,7 @@
         :md-linear="isPC()"
         :md-vertical="!isPC()"
       >
-        <md-step id="1" md-label="问题一">
+        <md-step id="1" md-label="来源" md-description="何处得知 SoTap">
           <h1>您从何处得知 SoTap？</h1>
           <md-field class="select">
             <md-select v-model="come_from">
@@ -65,7 +65,7 @@
           </md-field>
           <md-button @click="next()" class="md-primary md-raised">下一步 &raquo;</md-button>
         </md-step>
-        <md-step id="2" md-label="问题二">
+        <md-step id="2" md-label="LGBT 调查" md-description="您是 LGBT 吗">
           <h1>您是否为 LGBT 群体的一员？</h1>
           <p>
             请如实填写。若不了解 LGBT 可查看百度百科：
@@ -82,7 +82,7 @@
           </md-field>
           <md-button @click="next()" class="md-primary md-raised">下一步 &raquo;</md-button>
         </md-step>
-        <md-step id="3" md-label="问题三">
+        <md-step id="3" md-label="从事" md-description="正在做的事情">
           <h1>您目前正做些什么？</h1>
           <p>
             可填写您的学历（例如「学生，初三」）、您工作的公司或岗位。
@@ -101,7 +101,7 @@
             class="md-primary md-raised"
           >下一步 &raquo;</md-button>
         </md-step>
-        <md-step id="4" md-label="问题四">
+        <md-step id="4" md-label="自我介绍" md-description="介绍一下自己">
           <h1>简单介绍一下您自己吧。</h1>
           <p>简单阐述一下您喜欢的或不喜欢的事物，擅长的任何事情以及性格特点。当然，如果您愿意，也可以添加更多信息！</p>
           <md-field>
@@ -114,7 +114,7 @@
             class="md-primary md-raised"
           >下一步 &raquo;</md-button>
         </md-step>
-        <md-step id="5" md-label="问题五">
+        <md-step id="5" md-label="想要做的事" md-description="想要做些什么">
           <h1>在 Minecraft 领域中，您最想要做到的事情是什么呢？</h1>
           <md-field>
             <label>答案</label>
@@ -126,7 +126,7 @@
             class="md-primary md-raised"
           >下一步 &raquo;</md-button>
         </md-step>
-        <md-step id="6" md-label="问题六">
+        <md-step id="6" md-label="其它游戏爱好" md-description="喜欢什么游戏">
           <h1>除了 Minecraft，您是否还玩其它游戏？能否阐述一下您喜欢它的理由呢？</h1>
           <p>若只有 Minecraft，则可以填写喜欢 Minecraft 的理由。</p>
           <md-field>
@@ -139,7 +139,7 @@
             class="md-primary md-raised"
           >下一步 &raquo;</md-button>
         </md-step>
-        <md-step id="7" md-label="问题七">
+        <md-step id="7" md-label="社交网站" md-description="您的社交网站">
           <h1>为了让我们更了解您，请告诉我们一个或多个您的社交账户地址。</h1>
           <p>
             这可以是您的个人博客，或开放的社交网站。例如微博、知乎、推特、Github、Instagram、P 站、A/B 站、或 V2EX 个人主页等。
@@ -375,7 +375,9 @@ export default {
       r => {
         this.agreement_enabled = r[0];
         this.agreement_name = r[1];
-        this.agreement = "not_enabled";
+        if (this.agreement_enabled === false) {
+          this.agreement = "not_enabled";
+        }
       }
     );
   }
