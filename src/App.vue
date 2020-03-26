@@ -12,7 +12,7 @@ export default {
     setTheme(theme){
       let file = document.createElement('link');
       file.rel = 'stylesheet';
-      file.href = './css/themes/default-' + theme + '.css';
+      file.href = '/css/themes/default-' + theme + '.css';
       document.head.appendChild(file);
     }
   },
