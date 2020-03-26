@@ -41,6 +41,41 @@ switch ($action) {
         echo $parser->text($agreement);
     break;
 
+    case "get-applications":
+        $limit = $data["page"];
+        require_once "functions/database.php";
+        $conn = new DBController($cfg, "oasis");
+        $start = 10 * ($limit - 1);
+        $end = 10;
+        $result = $conn->query("SELECT id, username, email, lgbt, status FROM applications WHERE removed='no' LIMIT $start, $end");
+        if ($conn->isOK()) {
+            echo json_encode($result->fetch_all(MYSQLI_ASSOC), JSON_UNESCAPED_UNICODE);
+        } else {
+            echo $conn->getError();
+        }
+    break;
+
+    case "remove-application":
+        require_once "functions/database.php";
+        $conn = new DBController($cfg, "oasis");
+        $id = $data["id"];
+        $conn->query("UPDATE applications SET removed='yes' WHERE id='$id'");
+        if ($conn->isOK()) {
+            echo 'ok';
+        } else {
+            echo $conn->getError();
+        }
+    break;
+
+    case "get-max-page":
+        require_once "functions/database.php";
+        $conn = new DBController($cfg, "oasis");
+        $result = $conn->query("SELECT * FROM applications WHERE removed='no'");
+        if ($conn->isOK()) {
+            echo ceil($result->num_rows / 10); // min value 0
+        }
+    break;
+
     case "get-config":
         if (is_array($data)) {
             $result = [];
