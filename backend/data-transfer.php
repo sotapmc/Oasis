@@ -93,4 +93,21 @@ switch ($action) {
         }
         echo is_array($result) ? json_encode($result, JSON_UNESCAPED_UNICODE) : $result;
     break;
+
+    case "get":
+        require "functions/data-getter.php";
+        require "functions/database.php";
+        $conn = new DBController($cfg, "oasis");
+
+        if (is_array($data)) {
+            $Getter = new Getter($conn);
+            foreach ($data as $value) {
+                $Getter->get($value, true);
+            }
+            echo json_encode($Getter->getResult());
+        } else {
+            $Getter->get($value);
+            echo $Getter->getResult();
+        }
+    break;
 }
