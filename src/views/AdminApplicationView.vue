@@ -257,7 +257,7 @@ export default {
 
   .admin-table {
     @media screen and (min-width: 1024px) {
-      margin: 64px;
+      margin: 32px;
     }
   }
 }
