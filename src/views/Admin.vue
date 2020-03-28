@@ -1,6 +1,5 @@
 <template>
   <div class="container admin-main">
-    <h1 class="main-title">管理界面</h1>
     <div class="info-container">
       <div class="info-item">
         <span class="subtitle">请求总量</span>
@@ -58,30 +57,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      total_requests: 0,
-      passed_requests: 0,
-      pass_percentage: 0
-    };
-  },
-  created() {
-    this.$server.post(
-      "get",
-      ["total-requests", "passed-requests", "passed-percentage"],
-      r => {
-        let data = r.data;
-        this.total_requests = data[0];
-        this.passed_requests = data[1];
-        this.pass_percentage = data[2];
-      }
-    );
-  }
-};
-</script>
-
 <style lang="less" scoped>
 .main-title {
   font-size: 42px;
@@ -89,11 +64,14 @@ export default {
 }
 
 .admin-main {
+  @media screen and (max-width: 1024px) {
+    margin: 16px;
+  }
   .info-container {
-      -webkit-box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     border-radius: 2px;
     padding: 16px;
     margin-bottom: 16px;
@@ -111,8 +89,8 @@ export default {
       }
 
       .number {
-          font-weight: bolder;
-          font-size: 48px;
+        font-weight: bolder;
+        font-size: 48px;
       }
       display: inline-block;
     }
@@ -134,22 +112,33 @@ export default {
   width: 100%;
 
   .card-group {
-    display: flex;
+    @media screen and (min-width: 1024px) {
+      display: flex;
+    }
     .function-card {
-      display: inline-block;
-      margin-right: 8px;
-      margin-left: 8px;
+      @media screen and (max-width: 1024px) {
+        display: block;
+        width: 100%;
+        margin-bottom: 16px;
+      }
+      @media screen and (min-width: 1024px) {
+        margin-right: 8px;
+        margin-left: 8px;
+        display: inline-block;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+        margin-top: 16px;
+      }
+
       color: white;
       cursor: pointer;
       position: relative;
-
-      &:first-child {
-        margin-left: 0;
-      }
-
-      &:last-child {
-        margin-right: 0;
-      }
 
       & > .mdi {
         color: white;
@@ -187,8 +176,32 @@ export default {
         background-color: #673ab7;
       }
     }
-    margin-top: 16px;
-
   }
 }
 </style>
+
+<script>
+import Vue from 'vue';
+
+export default {
+  data() {
+    return {
+      total_requests: 0,
+      passed_requests: 0,
+      pass_percentage: 0
+    };
+  },
+  created() {
+    this.$server.post(
+      "get",
+      ["total-requests", "passed-requests", "passed-percentage"],
+      r => {
+        let data = r.data;
+        this.total_requests = data[0];
+        this.passed_requests = data[1];
+        this.pass_percentage = data[2];
+      }
+    );
+  }
+};
+</script>

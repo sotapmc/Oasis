@@ -17,15 +17,22 @@ const routes = [
   },
   {
     path: '/admin',
-    name: "admin",
-    component: () => import("../views/Admin.vue"),
-    // don't use children feature!
+    name: "admin-router",
+    component: () => import("../views/AdminRouter.vue"),
+    children: [
+      {
+        name: 'admin',
+        path: 'panel',
+        component: () => import("../views/Admin.vue")
+      },
+      {
+        name: "admin-view-requests",
+        path: "view-requests/:page?",
+        component: () => import("../views/AdminApplicationView.vue")
+      }
+    ]
   },
-  {
-    path: "/admin/view-requests/:page?",
-    name: "admin-view-requests",
-    component: () => import("../views/AdminApplicationView.vue")
-  },
+
 ]
 
 const router = new VueRouter({
