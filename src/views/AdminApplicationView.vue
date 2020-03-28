@@ -54,7 +54,7 @@
         </md-table-cell>
       </md-table-row>
     </md-table>
-    <Pagnition :current="Number(page)" :max="Number(max_page)" />
+    <Pagnition :current="Number(page)" :max="false" />
     <md-dialog
       v-if="error !== false"
       :md-close-on-esc="false"
@@ -110,7 +110,6 @@ export default {
   data() {
     return {
       page: 1,
-      max_page: -1,
       applications: [],
       error: false,
       error_dialog: false,
@@ -235,7 +234,6 @@ export default {
       if (this.page > r.data) {
         this.setError("invalid_page");
       } else {
-        this.max_page = r.data;
         this.$server.post(
           "get-applications",
           {

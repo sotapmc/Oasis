@@ -1,23 +1,31 @@
 <template>
-  <div class="pagination">
+  <div v-if="active" class="pagination">
     <md-button v-if="current > 1" class="page-number-button md-icon-button" @click="goto(1)">
-      <md-icon class="mdi mdi-chevron-double-left"/>
+      <md-icon class="mdi mdi-chevron-double-left" />
     </md-button>
-    <md-button v-if="current !== 1" class="page-number-button md-icon-button" @click="goto(current - 1)">
+    <md-button
+      v-if="current !== 1"
+      class="page-number-button md-icon-button"
+      @click="goto(current - 1)"
+    >
       <md-icon class="mdi mdi-arrow-left" />
     </md-button>
     <md-button
       class="page-number-button md-icon-button"
       @click="goto(n)"
       :class="n === current ? 'active' : ''"
-      v-for="n in getRange(((max - current) >= 9) ? current : max - 9, ((max - current) >= 9) ? current + 9 : max)"
+      v-for="n in getRange(((max_page - current) > 9) ? current : max_page - 8, ((max_page - current) > 9) ? current + 9 : max_page)"
       :key="n"
     >{{ n }}</md-button>
-    <md-button v-if="current !== max" class="page-number-button md-icon-button" @click="goto(current + 1)">
+    <md-button
+      v-if="current !== max_page"
+      class="page-number-button md-icon-button"
+      @click="goto(current + 1)"
+    >
       <md-icon class="mdi mdi-arrow-right" />
     </md-button>
-    <md-button v-if="current < max" class="page-number-button md-icon-button" @click="goto(max)">
-      <md-icon class="mdi mdi-chevron-double-right"/>
+    <md-button v-if="current < max_page" class="page-number-button md-icon-button" @click="goto(max_page)">
+      <md-icon class="mdi mdi-chevron-double-right" />
     </md-button>
   </div>
 </template>
@@ -34,13 +42,15 @@ export default {
   props: ["max", "current"],
   data() {
     return {
-      range_max: 0
+      range_max: 0,
+      max_page: 0,
+      active: false,
     };
   },
   methods: {
     getRange,
     goto(page) {
-      if (page === this.current || page < 1 || page > this.max || isNaN(page))
+      if (page === this.current || page < 1 || page > this.max_page || isNaN(page))
         return;
       this.$router.push({
         name: "admin-view-requests",
@@ -50,6 +60,13 @@ export default {
       });
       this.$bus.$emit("reload");
     }
+  },
+  mounted() {
+    // automatically get max page count from server if not specified.
+    this.$server.post("get-max-page", {}, r => {
+      this.max_page = this.max !== false ? this.max : r.data;
+      this.active = true;
+    });
   }
 };
 </script>
@@ -62,9 +79,9 @@ export default {
     margin-right: 16px;
 
     &.active {
-        background-color: var(--md-theme-default-primary);
-        color: white;
-        border: none;
+      background-color: var(--md-theme-default-primary);
+      color: white;
+      border: none;
     }
   }
   display: block;
