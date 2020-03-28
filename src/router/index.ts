@@ -15,13 +15,12 @@ const routes = [
     name: "agreement",
     component: () => import("../views/Agreement.vue")
   },
-  /*
   {
     path: '/admin',
     name: "admin",
     component: () => import("../views/Admin.vue"),
     // don't use children feature!
-  },*/
+  },
   {
     path: "/admin/view-requests/:page?",
     name: "admin-view-requests",
