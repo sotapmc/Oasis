@@ -24,7 +24,7 @@ const routes = [
   },*/
   {
     path: "/admin/view-requests/:page?",
-    name: "admin-view",
+    name: "admin-view-requests",
     component: () => import("../views/AdminApplicationView.vue")
   },
 ]
