@@ -1,4 +1,5 @@
 # Todo 3.29
 
 - add search function
-- finish admin main page
+- fix table page mobile layout
+- complete other functions listed in admin panel
