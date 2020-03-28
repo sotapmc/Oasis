@@ -6,14 +6,36 @@
       <span class="md-empty-state-description">当前页面没有任何内容</span>
       <md-button @click="$router.go(-1)" class="md-primary md-raised">&laquo; 后退</md-button>
     </md-empty-state>
-    <md-table class="admin-table" v-if="error === false && !empty" v-model="applications" md-card>
+    <div class="loading-container" v-if="loading">
+      <md-progress-spinner class="loading" md-mode="indeterminate" />
+    </div>
+    <md-table
+      @md-selected="selected"
+      class="admin-table"
+      v-if="error === false && !empty && loading === false"
+      v-model="applications"
+      md-card
+    >
       <md-table-toolbar>
         <h1 class="md-title">审核请求</h1>
       </md-table-toolbar>
 
-      <md-progress-spinner style="display: block; margin: auto" v-if="loading" class="loading" md-mode="indeterminate"/>
+      <md-table-toolbar slot="md-table-alternate-header" slot-scope="{ count }">
+        <div class="md-toolbar-section-start">已选中 {{ count }} 个请求</div>
 
-      <md-table-row v-if="loading === false" slot="md-table-row" slot-scope="{ item }">
+        <div @click="setDialog('multiple-delete-confirm')" class="md-toolbar-section-end">
+          <md-button class="md-icon-button">
+            <md-icon class="mdi mdi-delete" />
+          </md-button>
+        </div>
+      </md-table-toolbar>
+
+      <md-table-row
+        md-selectable="multiple"
+        md-auto-select
+        slot="md-table-row"
+        slot-scope="{ item }"
+      >
         <md-table-cell md-label="ID" md-numeric>{{ item.id }}</md-table-cell>
         <md-table-cell md-label="用户名">{{ item.username }}</md-table-cell>
         <md-table-cell md-label="邮箱">{{ item.email }}</md-table-cell>
@@ -32,7 +54,7 @@
         </md-table-cell>
       </md-table-row>
     </md-table>
-    <Pagnition :current="Number(page)" :max="Number(max_page)"/>
+    <Pagnition :current="Number(page)" :max="Number(max_page)" />
     <md-dialog
       v-if="error !== false"
       :md-close-on-esc="false"
@@ -74,7 +96,7 @@ import MdEmptyState from "vue-material/dist/components/MdEmptyState";
 import MdIcon from "vue-material/dist/components/MdIcon";
 import MdTooltip from "vue-material/dist/components/MdTooltip";
 import MdRipple from "vue-material/dist/components/MdRipple";
-import Pagnition from '../components/Pagination.vue';
+import Pagnition from "../components/Pagination.vue";
 
 Vue.use(MdTable)
   .use(MdCard)
@@ -94,6 +116,7 @@ export default {
       error_dialog: false,
       target_id: 0,
       empty: false,
+      selection: [],
       // custom dialog
       dialog: false,
       dialog_title: "",
@@ -103,7 +126,7 @@ export default {
       dialog_confirm_action: "",
       dialog_cancel: true,
       //loading
-      loading: true,
+      loading: true
     };
   },
   methods: {
@@ -121,7 +144,7 @@ export default {
             this.deleteApplication();
             this.dialog = false;
           };
-        break;
+          break;
 
         case "complete":
           this.dialog_title = "成功";
@@ -133,7 +156,18 @@ export default {
             this.dialog = false;
             this.$bus.$emit("reload");
           };
-        break;
+          break;
+
+        case "multiple-delete-confirm":
+          this.dialog_title = "删除确认";
+          this.dialog_label = "是否确认？";
+          this.dialog_desc = "这些申请都将会被移到回收站";
+          this.dialog_icon = "mdi-alert";
+          this.dialog_confirm_action = () => {
+            this.deleteApplication(true);
+            this.dialog = false;
+          };
+          break;
 
         default:
           return;
@@ -163,11 +197,11 @@ export default {
         this.error_dialog = true;
       }
     },
-    deleteApplication() {
+    deleteApplication(multiple) {
       this.$server.post(
         "remove-application",
         {
-          id: this.target_id
+          id: multiple ? this.selection : this.target_id
         },
         r => {
           if (r.data === "ok") {
@@ -175,6 +209,13 @@ export default {
           }
         }
       );
+    },
+    selected(i) {
+      let id = [];
+      i.forEach(k => {
+        id.push(k.id)
+      });
+      this.selection = id;
     }
   },
   components: {
@@ -192,7 +233,6 @@ export default {
         return;
       }
       if (this.page > r.data) {
-        
         this.setError("invalid_page");
       } else {
         this.max_page = r.data;
@@ -218,9 +258,12 @@ export default {
   position: relative;
 
   .admin-table {
-      @media screen and (min-width: 1024px) {
-          margin: 64px;
-      }   
+    @media screen and (min-width: 1024px) {
+      margin: 64px;
+    }
   }
+}
+
+.loading-container {
 }
 </style>

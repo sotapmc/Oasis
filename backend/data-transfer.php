@@ -59,7 +59,13 @@ switch ($action) {
         require_once "functions/database.php";
         $conn = new DBController($cfg, "oasis");
         $id = $data["id"];
-        $conn->query("UPDATE applications SET removed='yes' WHERE id='$id'");
+        if (is_array($id)) {
+            foreach ($id as $value) {
+                $conn->query("UPDATE applications set removed='yes' WHERE id='$value'");
+            }
+        } else {
+            $conn->query("UPDATE applications SET removed='yes' WHERE id='$id'");
+        }
         if ($conn->isOK()) {
             echo 'ok';
         } else {
