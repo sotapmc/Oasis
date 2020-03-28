@@ -23,3 +23,13 @@ export function getLinks(string: string): RegExpMatchArray | null | [] {
     let reg = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/);
     return string.match(reg) !== null ? string.match(reg) : [];
 }
+
+export function getRange(min: number, max: number): Array<number> {
+    let array = [];
+    let k = 0;
+    for (let i = min; i <= max; i++) {
+        array[k] = i;
+        k++;
+    }
+    return array;
+}
