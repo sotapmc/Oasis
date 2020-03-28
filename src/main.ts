@@ -6,10 +6,12 @@ import "./css/vue-material.min.css";
 import "./custom.less";
 import "@mdi/font/css/materialdesignicons.css";
 import Server from './server';
+import bus from './bus';
 
 Vue.config.productionTip = false
 
 Vue.prototype.$server = Server;
+Vue.prototype.$bus = bus;
 
 new Vue({
   router,
