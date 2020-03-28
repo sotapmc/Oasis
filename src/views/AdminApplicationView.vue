@@ -11,7 +11,9 @@
         <h1 class="md-title">审核请求</h1>
       </md-table-toolbar>
 
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
+      <md-progress-spinner style="display: block; margin: auto" v-if="loading" class="loading" md-mode="indeterminate"/>
+
+      <md-table-row v-if="loading === false" slot="md-table-row" slot-scope="{ item }">
         <md-table-cell md-label="ID" md-numeric>{{ item.id }}</md-table-cell>
         <md-table-cell md-label="用户名">{{ item.username }}</md-table-cell>
         <md-table-cell md-label="邮箱">{{ item.email }}</md-table-cell>
@@ -30,6 +32,7 @@
         </md-table-cell>
       </md-table-row>
     </md-table>
+    <Pagnition :current="Number(page)" :max="Number(max_page)"/>
     <md-dialog
       v-if="error !== false"
       :md-close-on-esc="false"
@@ -71,6 +74,7 @@ import MdEmptyState from "vue-material/dist/components/MdEmptyState";
 import MdIcon from "vue-material/dist/components/MdIcon";
 import MdTooltip from "vue-material/dist/components/MdTooltip";
 import MdRipple from "vue-material/dist/components/MdRipple";
+import Pagnition from '../components/Pagination.vue';
 
 Vue.use(MdTable)
   .use(MdCard)
@@ -84,6 +88,7 @@ export default {
   data() {
     return {
       page: 1,
+      max_page: -1,
       applications: [],
       error: false,
       error_dialog: false,
@@ -96,7 +101,9 @@ export default {
       dialog_desc: "",
       dialog_icon: "",
       dialog_confirm_action: "",
-      dialog_cancel: true
+      dialog_cancel: true,
+      //loading
+      loading: true,
     };
   },
   methods: {
@@ -124,7 +131,7 @@ export default {
           this.dialog_cancel = false;
           this.dialog_confirm_action = () => {
             this.dialog = false;
-            this.$router.go(0);
+            this.$bus.$emit("reload");
           };
         break;
 
@@ -170,7 +177,10 @@ export default {
       );
     }
   },
-  mounted() {
+  components: {
+    Pagnition
+  },
+  created() {
     this.page = this.$route.params.page ? this.$route.params.page : 1;
     if (this.page <= 0 || isNaN(Number(this.page))) {
       this.setError("invalid_page");
@@ -182,14 +192,17 @@ export default {
         return;
       }
       if (this.page > r.data) {
+        
         this.setError("invalid_page");
       } else {
+        this.max_page = r.data;
         this.$server.post(
           "get-applications",
           {
             page: this.page
           },
           r => {
+            this.loading = false;
             this.applications = r.data;
           }
         );
