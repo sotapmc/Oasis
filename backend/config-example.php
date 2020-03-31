@@ -22,7 +22,7 @@ return new Config([
         "max-app-per-player" => 3, // 允许每个玩家名最多申请次数（正整数）
         "max-app-per-page" => 10, // 后台管理请求界面每页显示的请求数量（>= 5 & <= 50）
         "agreement-enabled" => false, // 是否启用协议，即必须同意以后才可申请
-        "agreement-name" => "", // 协议的名称，例如「《SoTap 居民申请须知》」
+        "agreement-name" => "《协议》", // 协议的名称，例如「《SoTap 居民申请须知》」
         "color-theme" => "blue",
     ]
 ]);
