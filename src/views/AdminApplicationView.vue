@@ -125,7 +125,8 @@ export default {
       dialog_confirm_action: "",
       dialog_cancel: true,
       //loading
-      loading: true
+      loading: true,
+      max_page_length: 5,
     };
   },
   methods: {
@@ -153,6 +154,9 @@ export default {
           this.dialog_cancel = false;
           this.dialog_confirm_action = () => {
             this.dialog = false;
+            if (this.applications.length === this.max_page_length) {
+              this.$router.push((this.page - 1).toString());
+            }
             this.$bus.$emit("reload");
           };
           break;
@@ -246,6 +250,9 @@ export default {
         );
       }
     });
+    this.$server.post("get-config", "oasis.max-app-per-page", r => {
+      this.max_page_length = r.data;
+    })
   }
 };
 </script>
