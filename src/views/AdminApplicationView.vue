@@ -54,7 +54,7 @@
         </md-table-cell>
       </md-table-row>
     </md-table>
-    <Pagnition class="pagination" :current="Number(page)" :max="false" />
+    <Pagnition class="pagination" :mpl="max_page_length" :current="Number(page)" :max="false" />
     <md-dialog
       v-if="error !== false"
       :md-close-on-esc="false"

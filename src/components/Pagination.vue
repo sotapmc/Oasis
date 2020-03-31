@@ -22,7 +22,7 @@
         class="page-number-button md-icon-button"
         @click="goto(n)"
         :class="n === current ? 'active' : ''"
-        v-for="n in getRange(((max_page - current) > 9) ? current : 1, ((max_page - current) > 9) ? current + 9 : max_page)"
+        v-for="n in getRange(((max_page - current) > mpl) ? current : 1, ((max_page - current) > mpl) ? current + 9 : max_page)"
         :key="n"
       >{{ n }}</md-button>
     </div>
@@ -47,7 +47,7 @@
           <md-icon class="mdi mdi-numeric" />
           <label>页码</label>
           <md-input type="number" min="1" :max="max_page" step="1" v-model="jumpto" />
-          <span class="md-helper-text">正整数，不应超过 {{max_page}}</span>
+          <span class="md-helper-text">正整数，不应超过 {{max_page }} 且不可为当前页码</span>
           <span class="md-error">无效页码</span>
         </md-field>
       </md-dialog-content>
@@ -55,7 +55,7 @@
         <md-button @click="pageSelectionDialog = false" class="md-primary">取消</md-button>
         <md-button
           @click="goto(jumpto); pageSelectionDialog = false"
-          :disabled="jumptoInvalid === 'md-invalid'"
+          :disabled="!isPagenumValid()"
           class="md-raised md-primary"
         >前往第 {{ isPagenumValid() ? jumpto : 1 }} 页</md-button>
       </md-dialog-actions>
@@ -77,7 +77,7 @@ Vue.use(MdButton)
   .use(MdField);
 
 export default {
-  props: ["max", "current"],
+  props: ["max", "current", "mpl"],
   data() {
     return {
       range_max: 0,
@@ -86,12 +86,13 @@ export default {
       // only on mobile
       jumpto: 1,
       pageSelectionDialog: false,
-      jumptoInvalid: ""
+      jumptoInvalid: "",
     };
   },
   methods: {
     getRange,
     goto(page) {
+      page = Number(page);
       if (
         page === this.current ||
         page < 1 ||
@@ -112,12 +113,14 @@ export default {
       if (isPC()) {
         return true;
       } else {
+        let jumpto = Number(this.jumpto);
         return (
-          this.jumpto >= 1 &&
-          this.jumpto <= this.max_page &&
+          jumpto >= 1 &&
+          jumpto <= this.max_page &&
           // is float?
-          this.jumpto % 1 === 0 &&
-          this.jumpto.toString().indexOf(".") === -1
+          jumpto % 1 === 0 &&
+          jumpto !== this.current &&
+          !Number.isNaN(jumpto)
         );
       }
     }
