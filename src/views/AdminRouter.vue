@@ -5,7 +5,7 @@
         <md-button @click="$router.go(-1)" class="md-icon-button">
           <md-icon class="mdi mdi-arrow-left" />
         </md-button>
-        <span class="md-title">Management</span>
+        <span class="md-title" @click="$router.push({name: 'admin-panel'})">Management</span>
       </md-app-toolbar>
       <md-app-content>
         <router-view />
