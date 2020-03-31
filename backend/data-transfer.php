@@ -78,7 +78,7 @@ switch ($action) {
         $conn = new DBController($cfg, "oasis");
         $result = $conn->query("SELECT * FROM applications WHERE removed='no'");
         if ($conn->isOK()) {
-            echo ceil($result->num_rows / 10); // min value 0
+            echo ceil($result->num_rows / $cfg->get("oasis.max-app-per-page")); // min value 0
         }
     break;
 
