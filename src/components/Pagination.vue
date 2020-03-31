@@ -115,9 +115,8 @@ export default {
         return (
           this.jumpto >= 1 &&
           this.jumpto <= this.max_page &&
-          // is float?
-          this.jumpto % 1 === 0 &&
-          this.jumpto.toString().indexOf(".") === -1
+          // is integer?
+          Number.isInteger(this.jumptoInvalid)
         );
       }
     }
