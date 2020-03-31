@@ -45,8 +45,8 @@ switch ($action) {
         $limit = $data["page"];
         require_once "functions/database.php";
         $conn = new DBController($cfg, "oasis");
-        $start = 10 * ($limit - 1);
-        $end = 10;
+        $start = $cfg->get("oasis.max-app-per-page") * ($limit - 1);
+        $end = $cfg->get("oasis.max-app-per-page");
         $result = $conn->query("SELECT id, username, email, lgbt, status FROM applications WHERE removed='no' LIMIT $start, $end");
         if ($conn->isOK()) {
             echo json_encode($result->fetch_all(MYSQLI_ASSOC), JSON_UNESCAPED_UNICODE);
