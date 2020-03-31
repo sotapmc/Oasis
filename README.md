@@ -67,4 +67,4 @@ php -S 127.0.0.1:2333
 
 ## 协议
 
-Apache-2.0
+**M**ozilla **P**ublic **L**icense *Version 2.0*
