@@ -54,7 +54,7 @@
         </md-table-cell>
       </md-table-row>
     </md-table>
-    <Pagnition :current="Number(page)" :max="false" />
+    <Pagnition class="pagination" :current="Number(page)" :max="false" />
     <md-dialog
       v-if="error !== false"
       :md-close-on-esc="false"
@@ -259,9 +259,12 @@ export default {
     @media screen and (min-width: 1024px) {
       margin: 32px;
     }
-  }
-}
 
-.loading-container {
+    @media screen and (max-width: 1024px) {
+      margin: 0;
+      overflow: scroll;
+      box-shadow: none !important;
+    }
+  }
 }
 </style>
