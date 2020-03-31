@@ -18,10 +18,13 @@ const routes = [
   {
     path: '/admin',
     name: "admin-router",
+    redirect: {
+      name: "admin-panel"
+    },
     component: () => import("../views/AdminRouter.vue"),
     children: [
       {
-        name: 'admin',
+        name: 'admin-panel',
         path: 'panel',
         component: () => import("../views/Admin.vue")
       },
