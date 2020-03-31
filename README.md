@@ -3,7 +3,7 @@
 ![](https://img.shields.io/badge/backend-PHP-purple?logo=php)
 ![](https://img.shields.io/badge/front-Vue.js-brightgreen?logo=vue.js)
 ![](https://img.shields.io/badge/poweredby-sotapmc-blue)
-
+<a href="https://github.com/sotapmc/Oasis/wiki"><img src="https://img.shields.io/badge/wiki-clickhere-00bcd4"/></a>
 
 ![Oasis.png](https://i.loli.net/2020/03/23/pBbJlVmMsuNFkcg.png)
 
