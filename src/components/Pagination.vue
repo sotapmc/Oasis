@@ -22,7 +22,7 @@
         class="page-number-button md-icon-button"
         @click="goto(n)"
         :class="n === current ? 'active' : ''"
-        v-for="n in getRange(((max_page - current) > 9) ? current : max_page - 8, ((max_page - current) > 9) ? current + 9 : max_page)"
+        v-for="n in getRange(((max_page - current) > 9) ? current : 1, ((max_page - current) > 9) ? current + 9 : max_page)"
         :key="n"
       >{{ n }}</md-button>
     </div>
