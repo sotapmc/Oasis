@@ -1,0 +1,43 @@
+.md-table-cell-selection .md-table-cell-container, .md-table-cell-selection .md-table-cell-label, .md-table-cell-selection .md-table-head-container, .md-table-cell-selection .md-table-head-label {
+    justify-content: unset !important;
+}
+
+.md-app-scroller {
+    flex: unset !important;
+}
+
+.md-scrollbar::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.md-title {
+    font-family: "Minecraft", sans-serif;
+    font-weight: normal;
+    font-size: 24px;
+}
+
+.md-empty-state {
+    @media screen and (max-width: 1024px) {
+        height: 100%;
+        overflow: hidden;
+    }
+}
+
+
+*::selection {
+    color: inherit;
+}
+
+#app {
+    display: block;
+    margin: auto;
+}
+
+.md-helper-text, .md-error {
+    margin-left: 36px !important;
+}
+
+textarea {
+    resize: none;
+}

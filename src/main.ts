@@ -4,6 +4,7 @@ import './registerServiceWorker'
 import router from './router'
 import "./css/vue-material.min.css";
 import "./custom.less";
+import "./override.less";
 import "@mdi/font/css/materialdesignicons.css";
 import Server from './server';
 import bus from './bus';

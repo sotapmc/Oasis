@@ -1,5 +1,11 @@
 @import "./css/fonts/inter/inter.css";
-@import "./css/fonts/product-sans/pd.css";
+
+@font-face {
+    font-family: "Minecraft";
+    src: url("./css/fonts/Minecraft\ Regular.otf");
+    font-weight: normal;
+    font-style: normal;
+}
 
 html, body {
     position: relative;
@@ -10,30 +16,6 @@ body {
     height: 100%;
     width: 100%;
     font-family: "Inter", "Roboto", -apple-system, BlinkMacSystemFont, 'Helvetica Neue', "微软雅黑", "Microsoft YaHei UI", sans-serif
-}
-
-*::selection {
-    color: inherit;
-}
-
-#app {
-    display: block;
-    margin: auto;
-}
-
-.md-helper-text, .md-error {
-    margin-left: 36px !important;
-}
-
-textarea {
-    resize: none;
-}
-
-.md-empty-state {
-    @media screen and (max-width: 1024px) {
-        height: 100%;
-        overflow: hidden;
-    }
 }
 
 .loading-container {
@@ -108,16 +90,3 @@ textarea {
     margin-top: 56px;
 }
 
-.md-app-scroller {
-    flex: unset !important;
-}
-
-.md-scrollbar::-webkit-scrollbar {
-    width: 0 !important;
-    height: 0 !important;
-}
-
-.md-title {
-    font-family: "Product Sans Regular", sans-serif;
-    font-weight: normal;
-}
