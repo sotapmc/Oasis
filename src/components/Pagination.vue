@@ -57,7 +57,7 @@
           @click="goto(jumpto); pageSelectionDialog = false"
           :disabled="jumptoInvalid === 'md-invalid'"
           class="md-raised md-primary"
-        >前往第 {{ (jumpto >= 1 && jumpto <= max_page) ? jumpto : 1 }} 页</md-button>
+        >前往第 {{ isPagenumValid() ? jumpto : 1 }} 页</md-button>
       </md-dialog-actions>
     </md-dialog>
   </div>
@@ -107,7 +107,20 @@ export default {
       });
       this.$bus.$emit("reload");
     },
-    isPC
+    isPC,
+    isPagenumValid() {
+      if (isPC()) {
+        return true;
+      } else {
+        return (
+          this.jumpto >= 1 &&
+          this.jumpto <= this.max_page &&
+          // is float?
+          this.jumpto % 1 === 0 &&
+          this.jumpto.toString().indexOf(".") === -1
+        );
+      }
+    }
   },
   mounted() {
     // automatically get max page count from server if not specified.
@@ -118,7 +131,7 @@ export default {
   },
   watch: {
     jumpto(v, ov) {
-      if (this.jumpto >= 1 && this.jumpto <= this.max_page) {
+      if (this.isPagenumValid()) {
         this.jumptoInvalid = "";
       } else {
         this.jumptoInvalid = "md-invalid";
