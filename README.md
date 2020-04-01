@@ -1,4 +1,4 @@
-# Oasis
+# Oasis 暂停更新。
 
 ![](https://img.shields.io/badge/backend-PHP-purple?logo=php)
 ![](https://img.shields.io/badge/front-Vue.js-brightgreen?logo=vue.js)
