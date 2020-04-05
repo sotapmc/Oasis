@@ -1,8 +1,9 @@
 <?php
 
 require_once "functions/database.php";
+$cfg = require_once "config.php";
 
-$conn = new DBController();
+$conn = new DBController($cfg);
 
 $conn->query("CREATE DATABASE IF NOT EXISTS oasis");
 
@@ -21,9 +22,18 @@ $conn->query("CREATE TABLE applications (
     want_to_do VARCHAR(1000) NOT NULL,
     preferred_games VARCHAR(1000) NOT NULL,
     links VARCHAR(1000) NOT NULL,
-    status VARCHAR(20) DEFAULT 'pending',
-    removed VARCHAR(5) DEFAULT 'no'
+    removed VARCHAR(5) NOT NULL DEFAULT 'no',
+    status VARCHAR(100) NOT NULL DEFAULT 'pending'
 ) AUTO_INCREMENT=1");
+
+$conn->query("CREATE TABLE review (
+    id INT UNSIGNED NOT NULL PRIMARY KEY,
+    username VARCHAR(20) NOT NULL, 
+    comment VARCHAR(1000) NOT NULL,
+    basic_rank VARCHAR(2) NOT NULL,
+    overall_rank VARCHAR(2) NOT NULL,
+    spam VARCHAR(5) NOT NULL DEFAULT 'no'
+)");
 
 if ($conn->isOK()){
     echo 'Done';
