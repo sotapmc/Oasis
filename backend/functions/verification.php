@@ -56,8 +56,8 @@ class Verification {
             return false;
         }
         // 判断是否为黑名单
-        $r3 = $this->conn->query("SELECT * FROM applications WHERE username='$username' AND status='blacklisted'");
-        if ($r3->num_rows > 0) {
+        $r3 = $this->conn->query("SELECT spam FROM review WHERE username='$username'");
+        if ($r3->fetch_assoc()["spam"] === "yes") {
             $this->reason = "blacklisted";
             return false;
         }
