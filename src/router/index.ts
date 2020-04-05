@@ -32,6 +32,11 @@ const routes = [
         name: "admin-view-requests",
         path: "view-requests/:page?",
         component: () => import("../views/AdminApplicationView.vue")
+      },
+      {
+        name: "admin-requests-review",
+        path: "review/:id",
+        component: () => import("../views/AdminReviewer.vue")
       }
     ]
   },
