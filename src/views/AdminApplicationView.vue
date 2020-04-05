@@ -13,13 +13,21 @@
       @md-selected="selected"
       class="admin-table"
       v-if="error === false && !empty && loading === false"
-      v-model="applications"
+      v-model="table"
       md-card
     >
       <md-table-toolbar>
-        <h1 class="md-title">审核请求</h1>
+        <div class="md-toolbar-section-start">
+          <h1 class="md-title">审核请求</h1>
+        </div>
+
+        <md-field md-clearable class="search-field md-toolbar-section-end">
+          <label>按名称搜索...</label>
+          <md-input v-model="searchContent" @input="searchApplication" />
+        </md-field>
       </md-table-toolbar>
 
+      <md-table-empty-state md-label="无结果" :md-description="`找不到包含关键词 ${searchContent} 的请求`"></md-table-empty-state>
       <md-table-toolbar slot="md-table-alternate-header" slot-scope="{ count }">
         <div class="md-toolbar-section-start">已选中 {{ count }} 个请求</div>
 
@@ -40,7 +48,9 @@
         <md-table-cell md-label="用户名">{{ item.username }}</md-table-cell>
         <md-table-cell md-label="邮箱">{{ item.email }}</md-table-cell>
         <md-table-cell md-label="LGBT">{{ item.lgbt }}</md-table-cell>
-        <md-table-cell md-label="状态">{{ item.status }}</md-table-cell>
+        <md-table-cell md-label="状态">
+          <span class="label" :class="item.status">{{ item.status }}</span>
+        </md-table-cell>
         <md-table-cell md-label="操作">
           <md-button
             @click="target_id = item.id; setDialog('delete-confirm')"
@@ -48,7 +58,10 @@
           >
             <md-icon class="mdi mdi-delete" />
           </md-button>
-          <md-button @click="target_id = item.id" class="md-icon-button">
+          <md-button
+            @click="$router.push({name: 'admin-requests-review', params: {id: item.id} })"
+            class="md-icon-button"
+          >
             <md-icon class="mdi mdi-magnify" />
           </md-button>
         </md-table-cell>
@@ -111,6 +124,7 @@ export default {
     return {
       page: 1,
       applications: [],
+      table: [],
       error: false,
       error_dialog: false,
       target_id: 0,
@@ -124,9 +138,12 @@ export default {
       dialog_icon: "",
       dialog_confirm_action: "",
       dialog_cancel: true,
+      // search
+      searchContent: "",
+      searchResult: "",
       //loading
       loading: true,
-      max_page_length: 5,
+      max_page_length: 5
     };
   },
   methods: {
@@ -202,9 +219,10 @@ export default {
     },
     deleteApplication(multiple) {
       this.$server.post(
-        "remove-application",
+        "toggle-application",
         {
-          id: multiple ? this.selection : this.target_id
+          id: multiple ? this.selection : this.target_id,
+          action: "remove"
         },
         r => {
           if (r.data === "ok") {
@@ -216,9 +234,21 @@ export default {
     selected(i) {
       let id = [];
       i.forEach(k => {
-        id.push(k.id)
+        id.push(k.id);
       });
       this.selection = id;
+    },
+    searchApplication() {
+      let result = this.applications.filter(k => {
+        return k.username
+          .toLowerCase()
+          .includes(this.searchContent.toLowerCase());
+      });
+      if (result) {
+        this.table = result;
+      } else {
+        this.table = this.applications;
+      }
     }
   },
   components: {
@@ -246,13 +276,14 @@ export default {
           r => {
             this.loading = false;
             this.applications = r.data;
+            this.table = this.applications;
           }
         );
       }
     });
     this.$server.post("get-config", "oasis.max-app-per-page", r => {
       this.max_page_length = r.data;
-    })
+    });
   }
 };
 </script>
@@ -265,12 +296,24 @@ export default {
   .admin-table {
     @media screen and (min-width: 1024px) {
       margin: 32px;
+
+      .search-field {
+        max-width: 300px;
+      }
     }
 
     @media screen and (max-width: 1024px) {
       margin: 0;
       overflow: scroll;
       box-shadow: none !important;
+
+      .search-field {
+        width: 100%;
+      }
+
+      .md-title {
+        margin: 0;
+      }
     }
   }
 }
