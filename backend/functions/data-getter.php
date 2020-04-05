@@ -30,7 +30,7 @@ class Getter
                 $r2 = $conn->query("SELECT * FROM applications WHERE status='passed' AND removed='no'");
                 $passed = $r2->num_rows;
                 if ($all !== 0) {
-                    $result = floor($passed / $all);
+                    $result = ceil($passed / $all);
                 } else {
                     $result = 0;
                 }
