@@ -1,4 +1,4 @@
-# Oasis 暂停更新。
+# Oasis
 
 ![](https://img.shields.io/badge/backend-PHP-purple?logo=php)
 ![](https://img.shields.io/badge/front-Vue.js-brightgreen?logo=vue.js)
@@ -41,7 +41,7 @@ Oasis 目前在如下环境测试成功：
 在贡献之前，先 Fork 本项目后 `clone`。
 
 ```bash
-$ git clone git@github.com:YourName/Oasis
+$ git clone git@github.com:~/Oasis
 ```
 
 安装依赖
