@@ -381,7 +381,7 @@ export default {
         {
           id: this.$route.params.id,
           overall_rank: this.overallRank,
-          basic_rank: this.basic_rank,
+          basic_rank: this.basicRank,
         },
         r => {
           if (r.data === "ok") {
