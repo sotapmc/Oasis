@@ -379,7 +379,9 @@ export default {
       this.$server.post(
         "toggle-spam",
         {
-          id: this.$route.params.id
+          id: this.$route.params.id,
+          overall_rank: this.overallRank,
+          basic_rank: this.basic_rank,
         },
         r => {
           if (r.data === "ok") {
