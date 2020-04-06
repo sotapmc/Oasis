@@ -67,7 +67,7 @@
         </md-table-cell>
       </md-table-row>
     </md-table>
-    <Pagnition class="pagination" :mpl="max_page_length" :current="Number(page)" :max="false" />
+    <Pagnition class="pagination" :mpl="maxAppPerPage" :current="Number(page)" :max="false" />
     <md-dialog
       v-if="error !== false"
       :md-close-on-esc="false"
@@ -143,7 +143,7 @@ export default {
       searchResult: "",
       //loading
       loading: true,
-      max_page_length: 5
+      maxAppPerPage: 5
     };
   },
   methods: {
@@ -171,9 +171,6 @@ export default {
           this.dialog_cancel = false;
           this.dialog_confirm_action = () => {
             this.dialog = false;
-            if (this.applications.length === this.max_page_length) {
-              this.$router.push((this.page - 1).toString());
-            }
             this.$bus.$emit("reload");
           };
           break;
@@ -217,6 +214,7 @@ export default {
         this.error_dialog = true;
       }
     },
+    // (boolean)multiple 控制是否是批量进行操作。
     deleteApplication(multiple) {
       this.$server.post(
         "toggle-application",
@@ -226,7 +224,18 @@ export default {
         },
         r => {
           if (r.data === "ok") {
-            this.setDialog("complete");
+            if (this.applications.length - (multiple ? this.selection.length : 1) === 0) {
+              this.$router.push({
+                name: "admin-view-requests",
+                params: {
+                  page: this.page - 1,
+                }
+              });
+              // the push method won't auto reload here
+              this.$bus.$emit("reload");
+            } else {
+              this.setDialog("complete");
+            }
           }
         }
       );
@@ -282,7 +291,7 @@ export default {
       }
     });
     this.$server.post("get-config", "oasis.max-app-per-page", r => {
-      this.max_page_length = r.data;
+      this.maxAppPerPage = r.data;
     });
   }
 };
