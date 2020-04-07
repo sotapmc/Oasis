@@ -252,7 +252,7 @@ export default {
   },
   methods: {
     next(completed) {
-      this.step = (parseInt(this.step) + 1).toString();
+      this.step = (Number(this.step) + 1).toString();
     },
     isPC,
     getLinks,
@@ -286,7 +286,7 @@ export default {
         links: this.links
       };
 
-      this.$server.post("submit", data, r => {
+      this.$server.post("SUBMIT", "application", data, r => {
         console.log(r);
         this.submitting = false;
         let data = r.data;

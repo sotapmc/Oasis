@@ -7,11 +7,11 @@ class Verification {
     public $reason;
     public $data_ver;
 
-    public function __construct(array $data, mysqli $connect, Config $config) {
+    public function __construct(array $data, DBController $connect) {
         $this->data = $data;
         $this->error = [];
         $this->conn = $connect;
-        $this->cfg = $config;
+        $this->cfg = $GLOBALS["cfg"];
     }
 
     public function verify() {

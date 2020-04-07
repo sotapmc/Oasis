@@ -17,12 +17,12 @@ class Getter
             case "total-requests":
                 $r = $conn->query("SELECT * FROM applications WHERE removed='no'");
                 $result = $r->num_rows;
-            break;
+                break;
 
             case "passed-requests":
                 $r = $conn->query("SELECT * FROM applications WHERE status='passed' AND removed='no'");
                 $result = $r->num_rows;
-            break;
+                break;
 
             case "passed-percentage":
                 $r1 = $conn->query("SELECT * FROM applications WHERE removed='no'");
@@ -34,10 +34,15 @@ class Getter
                 } else {
                     $result = 0;
                 }
-            break;
+                break;
+
+            case "max-page":
+                $result = $conn->query("SELECT * FROM applications WHERE removed='no'");
+                $result = ceil($result->num_rows / $GLOBALS["cfg"]->get("oasis.max-app-per-page")); // min value 0
+                break;
 
             default:
-            return false;
+                return false;
         }
         if ($multiple) {
             array_push($this->result, $result);
@@ -47,7 +52,8 @@ class Getter
         return true;
     }
 
-    public function getResult() {
+    public function getResult()
+    {
         return $this->result;
     }
 }

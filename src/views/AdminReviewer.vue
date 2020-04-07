@@ -238,7 +238,8 @@ export default {
   created() {
     // 获取请求内容
     this.$server.post(
-      "get-application",
+      "GET",
+      "application",
       {
         id: this.$route.params.id
       },
@@ -251,7 +252,8 @@ export default {
           this.removed = r.data.removed === "yes";
           // 获取对请求的审核内容
           this.$server.post(
-            "get-review",
+            "GET",
+            "review",
             {
               id: this.$route.params.id
             },
@@ -342,7 +344,8 @@ export default {
     },
     submit() {
       this.$server.post(
-        "submit-review",
+        "SUBMIT",
+        "review",
         {
           basic_rank: Number(this.basicRank),
           overall_rank: Number(this.overallRank),
@@ -354,7 +357,8 @@ export default {
           if (r.data === "ok") {
             let total_rank = Number(this.basicRank) + Number(this.overallRank);
             this.$server.post(
-              "update-application-status",
+              "ALTER",
+              "application-status",
               {
                 status: total_rank >= 12 ? "passed" : "invalid"
               },
@@ -377,11 +381,12 @@ export default {
     },
     toggleSpam() {
       this.$server.post(
-        "toggle-spam",
+        "TOGGLE",
+        "spam-application",
         {
           id: this.$route.params.id,
           overall_rank: this.overallRank,
-          basic_rank: this.basicRank,
+          basic_rank: this.basicRank
         },
         r => {
           if (r.data === "ok") {
@@ -396,16 +401,23 @@ export default {
       );
     },
     toggleRemoveApplication() {
-      this.$server.post("toggle-application", {
-        id: this.$route.params.id,
-        action: this.removed ? "recover" : "remove",
-      }, r => {
-        if (r.data === "ok") {
-          this.snackbarMsg = this.removed ? "成功还原此申请" : "成功移除此申请";
-          this.snackbar = true;
-          this.removed = !this.removed;
+      this.$server.post(
+        "TOGGLE",
+        "remove-application",
+        {
+          id: this.$route.params.id,
+          toggle_action: !this.removed,
+        },
+        r => {
+          if (r.data === "ok") {
+            this.snackbarMsg = this.removed
+              ? "成功还原此申请"
+              : "成功移除此申请";
+            this.snackbar = true;
+            this.removed = !this.removed;
+          }
         }
-      })
+      );
     }
   },
   watch: {

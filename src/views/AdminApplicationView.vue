@@ -217,18 +217,23 @@ export default {
     // (boolean)multiple 控制是否是批量进行操作。
     deleteApplication(multiple) {
       this.$server.post(
-        "toggle-application",
+        "TOGGLE",
+        "remove-application",
         {
           id: multiple ? this.selection : this.target_id,
-          action: "remove"
+          toggle_action: true
         },
         r => {
           if (r.data === "ok") {
-            if (this.applications.length - (multiple ? this.selection.length : 1) === 0) {
+            if (
+              this.applications.length -
+                (multiple ? this.selection.length : 1) ===
+              0
+            ) {
               this.$router.push({
                 name: "admin-view-requests",
                 params: {
-                  page: this.page - 1,
+                  page: this.page - 1
                 }
               });
               // the push method won't auto reload here
@@ -269,28 +274,36 @@ export default {
       this.setError("invalid_page");
       return;
     }
-    this.$server.post("get-max-page", {}, r => {
-      if (r.data === 0) {
-        this.empty = true;
-        return;
+    this.$server.post(
+      "GET",
+      "data",
+      {
+        name: "max-page"
+      },
+      r => {
+        if (r.data === 0) {
+          this.empty = true;
+          return;
+        }
+        if (this.page > r.data) {
+          this.setError("invalid_page");
+        } else {
+          this.$server.post(
+            "GET",
+            "applications",
+            {
+              page: this.page
+            },
+            r => {
+              this.loading = false;
+              this.applications = r.data;
+              this.table = this.applications;
+            }
+          );
+        }
       }
-      if (this.page > r.data) {
-        this.setError("invalid_page");
-      } else {
-        this.$server.post(
-          "get-applications",
-          {
-            page: this.page
-          },
-          r => {
-            this.loading = false;
-            this.applications = r.data;
-            this.table = this.applications;
-          }
-        );
-      }
-    });
-    this.$server.post("get-config", "oasis.max-app-per-page", r => {
+    );
+    this.$server.getcfg("oasis.max-app-per-page", r => {
       this.maxAppPerPage = r.data;
     });
   }

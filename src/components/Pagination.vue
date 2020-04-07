@@ -86,7 +86,7 @@ export default {
       // only on mobile
       jumpto: 1,
       pageSelectionDialog: false,
-      jumptoInvalid: "",
+      jumptoInvalid: ""
     };
   },
   methods: {
@@ -127,10 +127,17 @@ export default {
   },
   mounted() {
     // automatically get max page count from server if not specified.
-    this.$server.post("get-max-page", {}, r => {
-      this.max_page = this.max !== false ? this.max : r.data;
-      this.active = true;
-    });
+    this.$server.post(
+      "GET",
+      "data",
+      {
+        name: "max-page"
+      },
+      r => {
+        this.max_page = this.max !== false ? this.max : r.data;
+        this.active = true;
+      }
+    );
   },
   watch: {
     jumpto(v, ov) {

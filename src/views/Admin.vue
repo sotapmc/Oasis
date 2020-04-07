@@ -193,8 +193,11 @@ export default {
   },
   created() {
     this.$server.post(
-      "get",
-      ["total-requests", "passed-requests", "passed-percentage"],
+      "GET",
+      "data",
+      {
+        name: ["total-requests", "passed-requests", "passed-percentage"],
+      },
       r => {
         let data = r.data;
         this.total_requests = data[0];

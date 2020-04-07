@@ -21,7 +21,7 @@ export default {
     };
   },
   mounted() {
-    this.$server.post("get-agreement", {}, r => {
+    this.$server.post("GET", "agreement", {}, r => {
       this.load = true;
       this.agreement = r.data;
     });

@@ -4,9 +4,9 @@ class DBController {
     public $conn;
     protected $cfg;
 
-    public function __construct(Config $config, string $db = null)
+    public function __construct(string $db = null)
     {
-        $this->cfg = $config;
+        $this->cfg = $GLOBALS["cfg"];
         $this->conn = $this->connect([
             "host" => $this->cfg->get("mysql.host"),
             "username" => $this->cfg->get("mysql.username"),
